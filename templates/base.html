@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8"> 
+    {% block title %} <title>个人博客</title>{% endblock %}
+</head>
+
+<body>
+    {% block bg %}{% endblock %}
+    <!-- <div>导航栏</div> -->
+
+    {% block content %}
+    <div id="arti">
+        {% block arti %}
+        {% endblock %}
+    </div>
+    {% endblock %}
+</body>
