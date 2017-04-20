@@ -12,7 +12,7 @@ from config import basedir
 import json
 from flask_login import login_user, logout_user, current_user, login_required
 
-from blog import app
+from blogDB import app
 
 #异常处理
 @app.errorhandler(404)
@@ -89,7 +89,7 @@ def admin():
         redirect(url_for('login'))
 
 #login
-@app.route('/login',method=['GET','POST'])
+@app.route('/login',methods=['GET','POST'])
 def login():
     pwd = password(request.form.get('passwd'))
     if pwd.check():
@@ -99,7 +99,7 @@ def login():
         return render_template('login.html')
 
 #logout
-@app.route('logout')
+@app.route('/logout')
 def logout():
     session['log']=False;
     return redirect(url_for('page',pg=1))
