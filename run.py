@@ -27,6 +27,12 @@ def page_not_found(e):
 def page_not_found(e):
     return render_template('error.html'),400;
 
+#自动关闭数据库
+#每次请求结束后自动运行
+def close_db(error):
+    if hasattr(g,'db.db'):
+        g.db.close();
+
 #index
 @app.route("/")
 @app.route("/index")
@@ -103,7 +109,33 @@ def login():
 def logout():
     session['log']=False;
     return redirect(url_for('page',pg=1))
-    
+
+#arti view
+@app.route('/article/<int:bg_id>',methods['GET','POST'])
+def article(bg_id):
+    if request.method == 'POST' and request.form['comment']:
+        newCom = comment(bg_id);
+        newCom.insert(request.form['comment'],request.form['author'],request.form['reply'])
+        return redirect(url_for('article',bg_id = bg_id))   
+    try:
+        curArti = Article(bg_id)
+        curArti.getArti()
+    except:
+        return render_template('error.html'),404
+    return render_template('article.html'.curArti=curA
+
+
+#arti new/edit/del
+@app.route('/new',methods=['GET','POST'])
+def new():
+    if session.get('log'):
+        curArti = Article(0)
+        if request.method == 'POST':
+            curArti.update(request.form['title'],request.form['tags'],request.form['img'],request.form['file'],request.form['editor'])
+            return redirect(url_for('page',pg=1))
+        return render_template('edit.html',curArti=curArti)
+    redirect(url_for('page',pg=1))
+
 
 if __name__ == '__main__':
     app.run(debug = True)
