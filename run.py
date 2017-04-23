@@ -11,6 +11,7 @@ import os
 from config import basedir
 import json
 from flask_login import login_user, logout_user, current_user, login_required
+from forPic import getToken
 
 from blogDB import app
 
