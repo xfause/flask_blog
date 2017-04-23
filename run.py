@@ -122,7 +122,7 @@ def article(bg_id):
         curArti.getArti()
     except:
         return render_template('error.html'),404
-    return render_template('article.html'.curArti=curA
+    return render_template('article.html'.curArti=curArti,id = bg_id)
 
 
 #arti new/edit/del
@@ -134,8 +134,32 @@ def new():
             curArti.update(request.form['title'],request.form['tags'],request.form['img'],request.form['file'],request.form['editor'])
             return redirect(url_for('page',pg=1))
         return render_template('edit.html',curArti=curArti)
-    redirect(url_for('page',pg=1))
+    return redirect(url_for('page',pg=1))
 
+@app.route("/edit/<int:bg_id>",methods=['GET','POST'])
+def edit(bg_id):
+    if session.get('log')=True:
+        try:
+            curArti = Article(bg_id)
+            curArti.getEdit()
+        except:
+            return redirect(url_for('page',pg = 1))
+        if request.method == 'POST':
+            curArti.update(request.form['title'],request.form['tags'],,request.form['img'],request.form['file'],request.form['editor'])
+            return redirect(url_for('article',bg_id=bg_id))
+        return render_template('edit.html',curArti=curArti,token=getToken())
+    return redirect(url_for('page',pg = 1))
+
+@app.route('/del/<int:id>',methods=['GET','POST'])
+def dele(id):
+    type = request.form.get('type',2,type=int)
+    pid = request.form.get('pid',-1,type=int)
+    if session.get('log') and pid==id:
+        if type==0:
+            Article(pid).delArti()
+        else if type ==1:
+            comment(pid).delete()
+    return jsonify(type=type,pid=pid)
 
 if __name__ == '__main__':
     app.run(debug = True)
