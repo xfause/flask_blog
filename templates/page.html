@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block bgg %}
+<div id="banner">
+
+</div>
+{% endblock %}
+
+{% block arti %}
+{% for result in results %}
+	<div class="well">
+    <a href="/article/{{ result.id }}" target="_blank" class="nul"><h2 class="cen">{{ result.title }}</h2></a>
+    <div class="disp">Posted on : {{ result.date }}</div>
+    <div class="finu">
+    <img src="/static/img/2.jpg" class="fil" />
+    <div class="fil">{{ result.file }}</div>
+    </div>
+    <pre>{{ result.abstract|safe }}</pre>
+    <div class="ltag">
+    <span>&#61484;</span>
+    {%- for tag in (result.tag or '').split(',') %}
+    <a href="/arch/{{ tag }}/1"  class="nul"><span class="tag">{{ tag }}</span></a>
+    {%- endfor %}
+    </div>
+    <a href="/article/{{ result.id }}" class="nul"><div class="center"><button class="sm">阅读全文</button></div></a>
+    <br>
+    </div>
+{% endfor %}
+
+<br>
+<div class="pagn">
+{% if not pg == 1 %}
+    <a href="{{ pg-1 }}">&#61696;</a>
+{% endif %}
+{%- for cu in range(pmax) %}
+{% if pg == cu+1 %}
+    <a href="{{ cu+1 }}" class="act">{{ cu+1 }}</a>
+{% else %}
+    <a href="{{ cu+1 }}">{{ cu+1 }}</a>
+{% endif %}
+{%- endfor %}
+{% if not pg==pmax %}
+    <a href="{{ pg+1 }}">&#61697;</a>
+{% endif %}
+</div>
+<br><br>
+
+{% endblock %}

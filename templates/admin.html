@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{t}}</title>
+{% endblock %}
+
+{% block content %}
+
+<div style='margin:45px;margin-top:100px;position:relative'>
+<a href="/new"><button>new</button></a>
+<div>
+
+<div class="well" style='margin:30px;word-wrap:break-word;position:relative'>
+<h3>最新评论</h3>
+<br>
+
+{% if session.get('log') %}
+
+<div class="cconfirmDel" id="commdel">
+<br><h4>确认删除?</h4><br>
+<button class="sm" id="codel">删除</button>
+<button class="sm" id="coqui">不了</button>
+</div>
+
+{% endif %}
+
+{% for ct in tem %}
+<div class="comm">
+	<HR color=#ddd SIZE=1>
+	<span>{{ ct[2] }}-----{{ ct[1] }}</span>
+	<pre>{{ ct[0] }}</pre>
+	<span>来源：{{ ct[4] }}</span>
+	<span><a href="/article/{{ ct[4] }}" style="margin-left:10px;"><button class="sm">跳转</button></a></span>
+	<span><button class="sm cd" pid="{{ ct[3] }}">删除</button></span>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

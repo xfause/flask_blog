@@ -1,4 +1,4 @@
-#https://github.com/aeonick/Aeonick/blob/master/blog/views.py
+#https://github.com/aeonick/Aeonick/blob/master/blog
 #http://www.skyin.win/
 from flask import Flask,render_template,flash,redirect,url_for, request, redirect,jsonify,session,g,send_from_directory
 from flask_wtf import Form
