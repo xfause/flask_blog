@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block meta %}
+<meta name="description" content="{{curArti.abstract}}">
+{% endblock %}
+
+{% block title %}
+<title>{{curArti.title}}</title>
+{% endblock %}
+
+{% block arti %}
+<script type="text/javascript" src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+<link href="//cdn.bootcss.com/highlight.js/9.6.0/styles/googlecode.min.css" rel="stylesheet">
+
+<div class="well">
+	<h1>{{curArti.title}}</h1>
+	{% if session.get('log') %}
+	<div class="cconfirmDel" id="commdel">
+	<br><h4>delete?</h4><br>
+	<button class="sm" id="codel">delete</button>
+	<button class="sm" id="coqui">cancel</button>
+	</div>
+
+	<a style="margin-left:10px" href="/edit/{{ id }}"><button class="sm">edit</button></a>
+	<br><h4>delete?</h4><br>
+	<button class="sm" id="cd">delete</button>
+	<button class="sm" id="qd">cancel</button>
+	{% endif %}
+
+	<p class="xs" style="float:right">{{curArti.date}}</p>
+	<br><br>
+	<arti>{{curArti.content|safe}}</arti>
+	<br>
+	<div class="ltag">
+	<span>&#61484;</span>
+	{% for tag in {curArti.tag or ''}.split(',') %}
+	<a href="/arch/{{tag}}/1" class="nul"><span class="tag">{{tag}}</span></a>
+	{% endfor %}
+	</div>
+	<br>
+	<br>
+</div>
+
+{% endblock %}
