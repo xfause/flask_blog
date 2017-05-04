@@ -4,6 +4,7 @@
 ### bootstrap for html page
 ### flask for server
 ### in developing to be continue
+### 5-1 other 3 pages
 ### 4-24 update page.html and admin.html,can't view.
 ### 4-23 update forPic.py use qiniu, can upload pic. can't view too
 ### 4-20 update can run but something wrong in database,so can't view html
