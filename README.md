@@ -4,6 +4,7 @@
 ### bootstrap for html page
 ### flask for server
 ### in developing to be continue
+### 5-6 nothing new
 ### 5-5 edit pages
 ### 5-1 other 3 pages
 ### 4-24 update page.html and admin.html,can't view.
