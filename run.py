@@ -8,7 +8,7 @@ from flask_login import (current_user, LoginManager,
                              login_required)
 from models import password,comment,Article,artiList
 import os
-from config import basedir
+#from config import basedir
 import json
 from flask_login import login_user, logout_user, current_user, login_required
 from forPic import getToken
@@ -112,7 +112,7 @@ def logout():
     return redirect(url_for('page',pg=1))
 
 #arti view
-@app.route('/article/<int:bg_id>',methods['GET','POST'])
+@app.route('/article/<int:bg_id>',methods=['GET','POST'])
 def article(bg_id):
     if request.method == 'POST' and request.form['comment']:
         newCom = comment(bg_id);
@@ -123,7 +123,7 @@ def article(bg_id):
         curArti.getArti()
     except:
         return render_template('error.html'),404
-    return render_template('article.html'.curArti=curArti,id = bg_id)
+    return render_template('article.html',curArti=curArti,id = bg_id)
 
 
 #arti new/edit/del
@@ -139,14 +139,14 @@ def new():
 
 @app.route("/edit/<int:bg_id>",methods=['GET','POST'])
 def edit(bg_id):
-    if session.get('log')=True:
+    if session.get('log'):
         try:
             curArti = Article(bg_id)
             curArti.getEdit()
         except:
             return redirect(url_for('page',pg = 1))
         if request.method == 'POST':
-            curArti.update(request.form['title'],request.form['tags'],,request.form['img'],request.form['file'],request.form['editor'])
+            curArti.update(request.form['title'],request.form['tags'],request.form['img'],request.form['file'],request.form['editor'])
             return redirect(url_for('article',bg_id=bg_id))
         return render_template('edit.html',curArti=curArti,token=getToken())
     return redirect(url_for('page',pg = 1))
@@ -158,7 +158,7 @@ def dele(id):
     if session.get('log') and pid==id:
         if type==0:
             Article(pid).delArti()
-        else if type ==1:
+        else :
             comment(pid).delete()
     return jsonify(type=type,pid=pid)
 
