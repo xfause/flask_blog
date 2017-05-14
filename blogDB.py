@@ -17,6 +17,6 @@ def connect_db():
 	return rv
 
 def get_db():
-	if not hasattr(g, 'db.db'):
+	if not hasattr(g, 'db'):
 		g.db = connect_db()
 	return g.db

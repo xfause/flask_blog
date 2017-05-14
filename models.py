@@ -1,4 +1,5 @@
 from blogDB import get_db
+from flask import Flask
 
 #password类
 class password:
@@ -198,23 +199,34 @@ def exper1():
 
 def inita():
     cur=get_db().cursor()
-    cur.execute('''CREATE TABLE blog
-       (ID         SERIAL    PRIMARY KEY,
-       title       TEXT,
-       content     TEXT      NOT NULL,
-       abstract    TEXT      NOT NULL,
-       date        TIMESTAMP DEFAULT (CURRENT_TIMESTAMP(0) + interval '1 hour'), 
-       tag         TEXT,
-       file        INT)''')
-    cur.execute('''CREATE TABLE tag
-       (ID         SERIAL    PRIMARY KEY,
+    cur.execute("""CREATE TABLE `blog`
+        (
+        `ID`         serial    PRIMARY KEY,
+        `title`       text,
+        `content`     text      NOT NULL,
+        `abstract`    text      NOT NULL,
+        `date`        timestamp DEFAULT (CURRENT_TIMESTAMP(0) + INTERVAL '1' HOUR), 
+        `tag`         text,
+        `file`        int
+        )""")
+    cur.execute("""CREATE TABLE tag
+        (
+        ID         SERIAL    PRIMARY KEY,
         tag        TEXT,
-        blog       INT)''')
-    cur.execute('''CREATE TABLE comm
-       (ID         SERIAL    PRIMARY KEY,
-       author      TEXT,
-       content     TEXT      NOT NULL,
-       blog        INT       NOT NULL,
-       date        TIMESTAMP DEFAULT (CURRENT_TIMESTAMP(0) + interval '8 hour'), 
-       reply       smallint)''')
+        blog       INT
+        )""")
+    cur.execute("""CREATE TABLE comm
+        (
+        ID          SERIAL    PRIMARY KEY,
+        author      TEXT,
+        content     TEXT      NOT NULL,
+        blog        INT       NOT NULL,
+        date        TIMESTAMP DEFAULT (CURRENT_TIMESTAMP(0) + INTERVAL '8' HOUR), 
+        reply       smallint
+        )""")
     get_db().commit()
+
+if __name__ == '__main__':
+    app = Flask(__name__)
+    with app.app_context():
+        inita()
