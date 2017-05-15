@@ -105,7 +105,7 @@ class comment:
         finally:
             return self.cList
 
-    def getNew(self,content,author,reply):
+    def getNew(self):
         blogdb = get_db()
         cur = blogdb.cursor()
         cur.execute('SELECT content,date,author,id,blog FROM comm order by id DESC LIMIT 12')
@@ -154,7 +154,7 @@ class artiList:
             cur.execute('SELECT count(*) FROM blog;')
         rawlen = cur.fetchall()
         rawlen = int(rawlen[0][0])
-        self.len = (rawlen+7)/8 or 1
+        self.len = round((rawlen+7)/8) or 1
         return self.len
 
     def alUpdate(self):
@@ -167,7 +167,7 @@ class artiList:
         else:
             cur.execute(' SELECT id FROM blog ORDER BY id DESC LIMIT 8 OFFSET ?',(self.page,))
         altemp = cur.fetchall()
-        altemp = map(lambda x: int(x[0]),altemp)
+        altemp = list(map(lambda x: int(x[0]),altemp))
         altemp.sort(reverse = True)
         self.al = altemp
         return self.al
@@ -198,6 +198,7 @@ def exper1():
     print(cur.fetchall())
 
 def inita():
+    #`date`        timestamp DEFAULT CURRENT_TIMESTAMP(0), 
     cur=get_db().cursor()
     cur.execute("""CREATE TABLE `blog`
         (
@@ -205,28 +206,24 @@ def inita():
         `title`       text,
         `content`     text      NOT NULL,
         `abstract`    text      NOT NULL,
-        `date`        timestamp DEFAULT (CURRENT_TIMESTAMP(0) + INTERVAL '1' HOUR), 
+        `date`        timestamp DEFAULT 'localtime',
         `tag`         text,
         `file`        int
         )""")
-    cur.execute("""CREATE TABLE tag
+    cur.execute("""CREATE TABLE `tag`
         (
-        ID         SERIAL    PRIMARY KEY,
-        tag        TEXT,
-        blog       INT
+        `ID`         SERIAL    PRIMARY KEY,
+        `tag`        TEXT,
+        `blog`       INT
         )""")
-    cur.execute("""CREATE TABLE comm
+    cur.execute("""CREATE TABLE `comm`
         (
-        ID          SERIAL    PRIMARY KEY,
-        author      TEXT,
-        content     TEXT      NOT NULL,
-        blog        INT       NOT NULL,
-        date        TIMESTAMP DEFAULT (CURRENT_TIMESTAMP(0) + INTERVAL '8' HOUR), 
-        reply       smallint
+        `ID`          SERIAL    PRIMARY KEY,
+        `author`      TEXT,
+        `content`     TEXT      NOT NULL,
+        `blog`        INT       NOT NULL,
+        `date`        timestamp DEFAULT 'localtime',
+        `reply`       smallint
         )""")
     get_db().commit()
 
-if __name__ == '__main__':
-    app = Flask(__name__)
-    with app.app_context():
-        inita()

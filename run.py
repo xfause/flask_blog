@@ -90,7 +90,7 @@ def tag(tag,pg):
 @app.route('/admin')
 def admin():
     if session.get('log'):
-        tem=comment.getNew()
+        tem=comment().getNew()
         return render_template('admin.html',tem = tem)
     else :
         redirect(url_for('login'))
@@ -100,10 +100,9 @@ def admin():
 def login():
     pwd = password(request.form.get('passwd'))
     if pwd.check():
-        session['log']=True
+        session['log'] = True
         return redirect(url_for('admin'))
-    else :
-        return render_template('login.html')
+    return render_template('login.html')
 
 #logout
 @app.route('/logout')
