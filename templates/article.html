@@ -29,11 +29,11 @@
 
 	<p class="xs" style="float:right">{{curArti.date}}</p>
 	<br><br>
-	<arti>{{curArti.content|safe}}</arti>
+	<div>{{curArti.content|safe}}</div>
 	<br>
 	<div class="ltag">
 	<span>&#61484;</span>
-	{% for tag in {curArti.tag or ''}.split(',') %}
+	{% for tag in (curArti.tag or '').split(',') %}
 	<a href="/arch/{{tag}}/1" class="nul"><span class="tag">{{tag}}</span></a>
 	{% endfor %}
 	</div>

@@ -1,65 +1,36 @@
 {% extends "base.html" %}
 
-{% block bggg %}
-<div id="banner">
-<!--<div style="position:absolute;top:140px;left:12vw;color:#ddd"><pre>
-从前
-有把斧子
-在做一个很长很长的梦
-......
-</pre></div>-->
-</div>
-{% endblock %}
-
-{% block bgg %}
-<script src="/static/css/index.js"></script>
-<div id="snow"></div>
-<div id="bg" class="bi">
-<div id="tela" class="bg do">Do What Thou Wilt</div>
-<div id="chao" class="contain ch">
-<div class="bg no" style="">Nothing is Impossible</div>
-<br>
-<div class="bg no" style="text-align:right">Everything is Permitted</div>
-</div>
-<mask id="mask">&#61702;</mask>
-</div>
-{% endblock %}
-
 {% block arti %}
-{%- for result in results %}
-<div class="well">
-    <a href="/article/{{ result.id }}" target="_blank" class="nul"><h2 class="cen">{{ result.title }}</h2></a>
-    <div class="disp">Posted on : {{ result.date }}</div>
-    <div class="finu">
-    <img src="/static/img/2.jpg" class="fil" />
-    <div class="fil">{{ result.file }}</div>
+    {%- for result in results %}
+    <div class="well">
+    <a href="/article/{{result.id}}"><h2>{{ result.title }}</h2></a>
+    <div id="Ptime">Post on:{{ result.date }}</div>
+    <!-->file pic other div<-->
+
+    <div class="tags">
+        {%- for tag in (result.tag or '').split(',') %}
+            <a href="/arch/{{ tag }}/1"> {{tag}} </a>
+        {%- endfor %}
     </div>
-    <pre>{{ result.abstract|safe }}</pre>
-    <div class="ltag">
-    <span>&#61484;</span>
-    {%- for tag in (result.tag or '').split(',') %}
-    <a href="/arch/{{ tag }}/1"  class="nul"><span class="tag">{{ tag }}</span></a>
-    {%- endfor %}
-    </div>
-    <a href="/article/{{ result.id }}" class="nul"><div class="center"><button class="sm">阅读全文</button></div></a>
+    <a href="/article/{{ result.id }}"><button>Read More</button></a>
     <br>
     </div>
-{%- endfor %}
+    {%- endfor %}
 
-<div class="pagn">
-{% if not pg == 1 %}
-    <a href="/page/{{ pg-1 }}">&#61696;</a>
-{% endif %}
-{% for cu in range(pmax) %}
-{% if pg == cu+1 %}
-    <a href="/page/{{ cu+1 }}" class="act">{{ cu+1 }}</a>
-{% else %}
-    <a href="/page/{{ cu+1 }}">{{ cu+1 }}</a>
-{% endif %}
-{% endfor %}
-{% if not pg==pmax %}
-    <a href="/page/{{ pg+1 }}">&#61697;</a>
-{% endif %}
-</div>
+    <div class="pageBlock">
+        {% if not pg==1 %}
+            <a href="/page/{{ pg-1 }}">previous</a>
+        {% endif %}
+        {% for cuP in range(pmax) %}
+            {% if pg == cuP+1 %}
+                <a href="/page/{{ cuP+1 }}" class="act">{{ cuP+1 }}</a>
+            {% else %}
+                <a href="/page/{{ cuP+1 }}">{{ cuP+1 }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if not pg==pmax %}
+            <a href="/page/{{ pg+1 }}">next</a>
+        {% endif %}
+    </div>
 
 {% endblock %}

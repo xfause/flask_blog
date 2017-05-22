@@ -1,5 +1,6 @@
 from blogDB import get_db
 from flask import Flask
+from functools import reduce
 
 #password类
 class password:
@@ -15,23 +16,45 @@ class password:
 class Article:
     def __init__(self,id):
         self.id = id
+        self.title = ''
+        self.content = ''
+        self.tag = ''
+        self.file = 1
 
     def getExit(self):
         # 必加 相当于和数据库连接
         blogdb = get_db()
         cur = blogdb.cursor()
         #
-        cur.execute('SELECT id, title, abstract, tag, date,file FROM blog where id = ?',(self.id,))
-        self.exit = cur.fetchall()[0]
-        return self.exit
+        cur.execute('SELECT id, title, abstract, tag, date, file FROM blog where id = ?',(self.id,))
+        exit = cur.fetchall()[0]
+        self.id = exit[0]
+        self.title = exit[1]
+        self.abstract = exit[2]
+        self.tag = exit[3]
+        date = exit[4]
+        if hasattr(date,'strftime'):
+            self.date = date.strftime('%x')
+        else:
+            self.date = date[5:7] + '/' + date[8:10] + '/' + date[:4]
+        file = exit[5]
+        fileDict = {1:'分类1', 3:'分类2', 4:'分类3', 5:'分类4'}
+        self.file = fileDict[file]
+        return self
 
     def getArti(self):
         blogdb = get_db()
         cur = blogdb.cursor()
-        cur.execute('SELECT title,date,content,tag,abstract FROM blog where id = ?',(self.id,))
-        self.arti = cur.fetchall()[0]
-        return self.arti
-
+        cur.execute('SELECT title, date, content, tag, abstract from blog where id = ?',(self.id,))
+        arti = cur.fetchall()[0]
+        self.title = arti[0]
+        self.date = arti[1]
+        self.content = arti[2]
+        self.tag = arti[3]
+        self.abstract = arti[4][:-17]
+        com = comment(self.id)
+        self.comList = com.commList()
+        
     def delArti(self):
         blogdb = get_db()
         cur = blogdb.cursor()
@@ -75,7 +98,7 @@ class comment:
     def __init__(self, id=0):
         self.id = id
 
-    def commlist(self):
+    def commList(self):
         try:
             blogdb = get_db()
             cur = blogdb.cursor()
@@ -96,6 +119,7 @@ class comment:
             def coVeri(x):
                 x[4] = x[4] or x[3]
                 diff = x[4]-x[3]
+                diff = diff or ''
                 x[4] = diff and u're'
                 return x
             self.cList = map(coVeri,tmp)
@@ -135,13 +159,13 @@ class artiList:
         self.page = (page-1)*8
 
     def getAl(self):
-        result = []
+        results = []
         for arti in self.al:
             tmp = Article(arti)
-            tmp = tmp.getEdit()
-            result.append(tmp)
-        self.result = result
-        return self.result
+            tmp = tmp.getExit()
+            results.append(tmp)
+        self.results = results
+        return self.results
 
     def getLen(self):
         blogdb = get_db()
@@ -163,7 +187,7 @@ class artiList:
         if self.method == 'file':
             cur.execute(' SELECT id FROM blog WHERE file = ? ORDER BY id DESC LIMIT 8 OFFSET ?',(self.key,self.page,))
         elif self.method == 'tag':
-            cur.execute('select blog from tag where tag = ? LIMIT 8 OFFSET ?',(self.key,self.page,))
+            cur.execute('SELECT blog from tag where tag = ? LIMIT 8 OFFSET ?',(self.key,self.page,))
         else:
             cur.execute(' SELECT id FROM blog ORDER BY id DESC LIMIT 8 OFFSET ?',(self.page,))
         altemp = cur.fetchall()
@@ -202,28 +226,28 @@ def inita():
     cur=get_db().cursor()
     cur.execute("""CREATE TABLE `blog`
         (
-        `ID`         serial    PRIMARY KEY,
-        `title`       text,
-        `content`     text      NOT NULL,
-        `abstract`    text      NOT NULL,
-        `date`        timestamp DEFAULT 'localtime',
-        `tag`         text,
-        `file`        int
+        ID          INTEGER    PRIMARY KEY AUTOINCREMENT,
+        title       TEXT,
+        content     TEXT      NOT NULL,
+        abstract    TEXT      NOT NULL,
+        date        TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP(0)',
+        tag         TEXT,
+        file        INT
         )""")
     cur.execute("""CREATE TABLE `tag`
         (
-        `ID`         SERIAL    PRIMARY KEY,
-        `tag`        TEXT,
-        `blog`       INT
+        ID         INTEGER    PRIMARY KEY AUTOINCREMENT,
+        tag        TEXT,
+        blog       INT
         )""")
     cur.execute("""CREATE TABLE `comm`
         (
-        `ID`          SERIAL    PRIMARY KEY,
-        `author`      TEXT,
-        `content`     TEXT      NOT NULL,
-        `blog`        INT       NOT NULL,
-        `date`        timestamp DEFAULT 'localtime',
-        `reply`       smallint
+        ID          INTEGER   PRIMARY KEY AUTOINCREMENT,
+        author      TEXT,
+        content     TEXT      NOT NULL,
+        blog        INT       NOT NULL,
+        date        TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP(0)',
+        reply       smallint
         )""")
     get_db().commit()
 
