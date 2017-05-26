@@ -5,6 +5,8 @@
 
 
 {% block content %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"> 
+</script> 
 <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/wangeditor/2.1.10/css/wangEditor.min.css">
 <script type="text/javascript" src="//cdn.bootcss.com/wangeditor/2.1.10/js/wangEditor.min.js"></script>
 
@@ -16,10 +18,10 @@
     <form method="POST" name="form" onSubmit="return confirm();">
         <label>分类</label>
         <select name="file" style="width:80px">
-        <option value =1 {% if curArti.file==1 %}selected="selected"{% endif %}>闲聊</option>
-        <option value =3 {% if curArti.file==3 %}selected="selected"{% endif %}>编程</option>
-        <option value =4 {% if curArti.file==4 %}selected="selected"{% endif %}>杂谈</option>
-        <option value =5 {% if curArti.file==5 %}selected="selected"{% endif %}>转载</option>
+        <option value =1 {% if curArti.file==1 %}selected="selected"{% endif %}>分类1</option>
+        <option value =3 {% if curArti.file==3 %}selected="selected"{% endif %}>分类2</option>
+        <option value =4 {% if curArti.file==4 %}selected="selected"{% endif %}>分类3</option>
+        <option value =5 {% if curArti.file==5 %}selected="selected"{% endif %}>分类4</option>
         </select>
         <label>标签</label>
         <input type="text" name="tags" style="width:60%" value="{{ curArti.tag }}">
@@ -27,7 +29,7 @@
         <label>标题</label>
         <input type="text" name="title" style="width:80%" value="{{ curArti.title }}">
         <br><br>
-        <label>摘要</label>
+        <label>摘要图</label>
         <input type="text" id="img0" name="img" style="width:80%;"><br>
         <label>快速设置</label>
         <input type="radio" name="abi" id="imgc"/> 选择
@@ -37,14 +39,14 @@
         <textarea id="editor" name="editor" style="height:600px" type="text">{{ curArti.content }}</textarea>
         <script type="text/javascript">
         var editor = new wangEditor('editor');
-        editor.config.uploadImgUrl = 'http://upload-z2.qiniu.com';
+        editor.config.uploadImgUrl = 'http://upload.qiniu.com/';
         editor.config.uploadImgFileName = 'file';
         editor.config.uploadParams = {
         token: '{{ token }}',
         };
         editor.config.uploadImgFns.onload = function (resultText, xhr) {
             var originalName = editor.uploadImgOriginalName || '';  
-            resultText = 'http://oouubitkj.bkt.clouddn.com/'+JSON.parse(resultText).key; //这里yourname写自己的七牛外链默认域名
+            resultText = 'http://yourname/'+JSON.parse(resultText).key; //这里yourname写自己的七牛外链默认域名
             editor.command(null, 'InsertImage', resultText);
         };
         editor.create();

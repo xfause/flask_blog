@@ -2,13 +2,13 @@
 
 {% block bgg %}
 <div id="banner">
+
 </div>
 {% endblock %}
 
-
 {% block arti %}
-{%- for result in results %}
-<div class="well">
+{% for result in results %}
+	<div class="well">
     <a href="/article/{{ result.id }}" target="_blank" class="nul"><h2 class="cen">{{ result.title }}</h2></a>
     <div class="disp">Posted on : {{ result.date }}</div>
     <div class="finu">
@@ -25,7 +25,7 @@
     <a href="/article/{{ result.id }}" class="nul"><div class="center"><button class="sm">阅读全文</button></div></a>
     <br>
     </div>
-{%- endfor %}
+{% endfor %}
 
 <br>
 <div class="pagn">

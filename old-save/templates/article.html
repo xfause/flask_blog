@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block meta %}
+<meta name="description" content="{{curArti.abstract}}">
+{% endblock %}
+
+{% block title %}
+<title>{{curArti.title}}</title>
+{% endblock %}
+
+{% block arti %}
+	<script type="text/javascript" src="//cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js"></script>
+	<link href="//cdn.bootcss.com/highlight.js/9.6.0/styles/googlecode.min.css" rel="stylesheet">
+
+	<div class="arti">
+		<h1>{{curArti.title}}</h1>
+		{% if session.get('log') %}
+			<div class="comfirmDel" id="commdel">
+			<br><h4>delete?</h4><br>
+			<button id="delArti">delete</button>
+			<button id="cancelDel">cancel</button>
+			</div>
+
+			<a href="/edit/{{ id }}"><button>edit</button></a>
+			<br><h4>delete?</h4><br>
+			<button class="sm" id="cd">delete</button>
+			<button class="sm" id="qd">cancel</button>
+		{% endif %}
+
+		<p>{{curArti.date}}</p>
+		<br><br>
+		<div>{{curArti.content|safe}}</div>
+		<br>
+		<div class="ltag">
+			<span>&#61484;</span>
+			{% for tag in (curArti.tag or '').split(',') %}
+			<a href="/arch/{{tag}}/1"><span class="tag">{{tag}}</span></a>
+			{% endfor %}
+		</div>
+		<br>
+	</div>
+
+	<div class="comment">
+		<form method="POST">
+			<textarea name="comment" id="comment" rows=3 placeholder="一句话吐槽"></textarea>
+    	<br>
+    	<div>
+    	<input type="text" name="author" placeholder="输入您的昵称或直接留空">
+    	<button type="submit" class="sm">发布评论!</button>
+    	</div>
+    	<input type="text" id="reply" name="reply" style="display:none">
+		</form>
+		<br>
+
+		{% for ct in curArti.comList %}
+		<div class="comm {{ ct[4] }}">
+			<span>{{ ct[2] }}</span>
+			<a href="#-1"><rep class='{{ ct[4] }}' id="{{ ct[3] }}">&#61714;&nbsp;回复</rep></a>
+			<pre>{{ ct[0] }}</pre>
+			<p>{{ ct[1] }}</p>
+			{% if session.get('log') and ct[1] != "" %}
+				<button class="sm cd" pid="{{ ct[3] }}">删除</button>
+			{% endif %}
+		</div>
+		{% endfor %}
+	</div>
+{% endblock %}

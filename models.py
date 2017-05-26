@@ -38,7 +38,7 @@ class Article:
         else:
             self.date = date[5:7] + '/' + date[8:10] + '/' + date[:4]
         file = exit[5]
-        fileDict = {1:'分类1', 3:'分类2', 4:'分类3', 5:'分类4'}
+        fileDict = {1:'闲聊', 3:'编程', 4:'杂谈', 5:'转载'}
         self.file = fileDict[file]
         return self
 

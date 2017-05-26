@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>管理中心</title>
+{% endblock %}
+
+{% block content %}
+	<div class="newBlog">
+		<a href="/new"><button>写新博客</button></a>
+	</div>
+
+	<div class="recentComment">
+		<h3>最新评论</h3>
+		<br>
+		{% if session.get('log') %}
+			<div class="delComment">
+				<br><h4>确认删除？</h4><br>
+				<button id="comfirm">delete</button>
+				<button id="cancel">no</button>
+			</div>
+		{% endif %}
+		{% for cur in tem %}
+		<div class="comm">
+			<span>{{cur[2]}}-----{{cur[1]}}</span>
+			<pre>{{cur[0]}}</pre>
+			<span>来源:{{cur[4]}}</span>
+			<span><a href="/article/{{ cur[4] }}"><button >跳转</button></a></span>
+			<span><button pid="{{ cur[3] }}">删除</button></span>
+		</div>
+		{% endfor %}
+	</div>
+{% endblock %}

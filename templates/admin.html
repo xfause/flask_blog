@@ -1,32 +1,38 @@
 {% extends "base.html" %}
 
 {% block title %}
-<title>管理中心</title>
+<title>{{ t }}</title>
 {% endblock %}
 
 {% block content %}
-	<div class="newBlog">
-		<a href="/new"><button>写新博客</button></a>
-	</div>
+<div style='margin:45px;margin-top:100px;position:relative'>
+<a href="/new"><button id="subm" class="lg">发布博客</button></a>
+</div>
+<div class="well" style='margin:30px;word-wrap:break-word;position:relative'>
+<h3>最新评论</h3>
+<br>
+{% if session.get('log') %}
+<div class="cconfirmDel" id="commdel">
+<br><h4>确认删除?</h4><br>
+<button class="sm" id="codel">删除</button>
+<button class="sm" id="coqui">不了</button>
+</div>
+{% endif %}
 
-	<div class="recentComment">
-		<h3>最新评论</h3>
-		<br>
-		{% if session.get('log') %}
-			<div class="delComment">
-				<br><h4>确认删除？</h4><br>
-				<button id="comfirm">delete</button>
-				<button id="cancel">no</button>
-			</div>
-		{% endif %}
-		{% for cur in tem %}
-		<div class="comm">
-			<span>{{cur[2]}}-----{{cur[1]}}</span>
-			<pre>{{cur[0]}}</pre>
-			<span>来源:{{cur[4]}}</span>
-			<span><a href="/article/{{ cur[4] }}"><button >跳转</button></a></span>
-			<span><button pid="{{ cur[3] }}">删除</button></span>
-		</div>
-		{% endfor %}
-	</div>
+{%- for ct in tem %}
+<div class="comm">
+<HR color=#ddd SIZE=1>
+<span>{{ ct[2] }}-----{{ ct[1] }}</span>
+<pre>{{ ct[0] }}</pre>
+<span>来源：{{ ct[4] }}</span>
+<span><a href="/article/{{ ct[4] }}" style="margin-left:10px;"><button class="sm">跳转</button></a></span>
+<span><button class="sm cd" pid="{{ ct[3] }}">删除</button></span>
+
+</div>
+{%- endfor %}
+
+</div>
+
+
+
 {% endblock %}
