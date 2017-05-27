@@ -196,6 +196,17 @@ class artiList:
         self.al = altemp
         return self.al
 
+class tagInfo:
+    def __init__(self):
+        blogdb = get_db()
+        cur = blogdb.cursor()
+        cur.execute('SELECT tag from tag order by id')
+        temp = cur.fetchall()
+        temp = list(set(temp))
+        tags = ','.join('%s' % id for id in temp)
+        print(tags)
+        self.tags = tags
+
 #插入图片
 def abstr(text,img=""):
     text = text[:1200]

@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import (current_user, LoginManager,
                              login_user, logout_user,
                              login_required)
-from models import password,comment,Article,artiList
+from models import password,comment,Article,artiList,tagInfo
 import os
 #from config import basedir
 import json
@@ -38,16 +38,18 @@ def close_db(error):
 @app.route("/")
 @app.route("/index")
 def index():
+    info = tagInfo()
     curPage = artiList(page = 1)
     curPage.alUpdate()
     results = curPage.getAl()
     pmax = curPage.getLen()
     return render_template('index.html',results = results,
-        pmax = pmax,pg = 1)
+        pmax = pmax,pg = 1,info = info)
 
 #分页
 @app.route("/page/<int:pg>")
 def page(pg):
+    info = tagInfo()
     curPage = artiList(page = pg)
     curPage.alUpdate()
     results = curPage.getAl()
@@ -57,11 +59,12 @@ def page(pg):
         return render_template('error.html'),404;
     else:
         return render_template('page.html',results = results,
-        pmax = pmax,pg = pg)
+        pmax = pmax,pg = pg,info = info)
 
 #分类
 @app.route('/arch<int:arc>/<int:pg>')
 def arch(arc,pg):
+    info = tagInfo()
     curPage = artiList('file',arc,pg)
     curPage.alUpdate()
     results = curPage.getAl()
@@ -71,10 +74,11 @@ def arch(arc,pg):
         return render_template('error.html'), 404
     else:
         return render_template('page.html',results = results,
-            pmax = pmax,pg = pg)
+            pmax = pmax,pg = pg,info = info)
 #tag
 @app.route('/arch/<tag>/<int:pg>')
 def tag(tag,pg):
+    info = tagInfo()
     curPage = artiList('tag',tag,pg)
     curPage.alUpdate()
     results = curPage.getAl()
@@ -84,7 +88,7 @@ def tag(tag,pg):
         return render_template('error.html'), 404
     else:
         return render_template('page.html',results = results,
-            pmax = pmax,pg = pg)
+            pmax = pmax,pg = pg,info = info)
 
 #管理
 @app.route('/admin')
@@ -113,6 +117,7 @@ def logout():
 #arti view
 @app.route('/article/<int:bg_id>',methods=['GET','POST'])
 def article(bg_id):
+    info = tagInfo()
     if request.method == 'POST' and request.form['comment']:
         newCom = comment(bg_id);
         newCom.insert(request.form['comment'],request.form['author'],request.form['reply'])
@@ -122,7 +127,7 @@ def article(bg_id):
         curArti.getArti()
     except:
         return render_template('error.html'),404
-    return render_template('article.html',curArti=curArti,id = bg_id)
+    return render_template('article.html',curArti=curArti,id = bg_id,info = info)
 
 
 #arti new/edit/del
