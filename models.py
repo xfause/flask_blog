@@ -103,29 +103,33 @@ class comment:
             blogdb = get_db()
             cur = blogdb.cursor()
             #按照id降序排列DESC 升序排列ASC order by
-            cur.execute('SELECT content,date,author,id,reply from comm where id=? order by id DESC',(self.id,))
-            tmp = cur.fetchall() or []
-            tmp = list(tmp) #列表化
-            tmp = map(lambda x:list(x),tmp) #lambda
-            #???
-            def coSort(x,y):
-                xid = x[4] or x[3]
-                yid = y[4] or y[3]
-                if xid<yid :
-                    return 1
-                else:
-                    return -1
-            tmp = sorted(tmp,coSort)
-            def coVeri(x):
-                x[4] = x[4] or x[3]
-                diff = x[4]-x[3]
+            cur.execute('SELECT content,date,author,id,reply from comm where blog=? order by id DESC',(self.id,))
+            tmp = cur.fetchall()
+            #print(tmp)
+            #tmp = list(map(lambda x:list(x),tmp)) #lambda
+
+            tmp = sorted(tmp,key=lambda x:(x[3] or x[4]))
+            self.cList = tmp
+            print(tmp)
+            Listlen = len(tmp)
+            for i in range(Listlen-1):
+                tmparr = list(tmp[i])
+                tmparr[4] = tmparr[4] or tmparr[3]
+                diff = tmparr[4]-tmparr[3]
                 diff = diff or ''
-                x[4] = diff and u're'
-                return x
-            self.cList = map(coVeri,tmp)
+                tmparr[4] = diff and u're'
+                tmp[i] = tuple(tmparr)
+
+            # def coVeri(x):
+            #     x[4] = x[4] or x[3]
+            #     diff = x[4]-x[3]
+            #     diff = diff or ''
+            #     x[4] = diff and u're'
+            #     return x
+            # self.cList = map(coVeri,tmp)
             ###
         except:
-            self.cList = []
+             self.cList = []
         finally:
             return self.cList
 
@@ -204,7 +208,6 @@ class tagInfo:
         temp = cur.fetchall()
         temp = list(set(temp))
         tags = ','.join('%s' % id for id in temp)
-        print(tags)
         self.tags = tags
 
 #插入图片
@@ -234,6 +237,7 @@ def exper1():
 
 def inita():
     #`date`        timestamp DEFAULT CURRENT_TIMESTAMP(0), 
+    # date TimeStamp DEFAULT (datetime('now','localtime'))
     cur=get_db().cursor()
     cur.execute("""CREATE TABLE `blog`
         (
@@ -241,7 +245,7 @@ def inita():
         title       TEXT,
         content     TEXT      NOT NULL,
         abstract    TEXT      NOT NULL,
-        date        TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP(0)',
+        date        TimeStamp DEFAULT (datetime('now','localtime')),
         tag         TEXT,
         file        INT
         )""")
@@ -257,7 +261,7 @@ def inita():
         author      TEXT,
         content     TEXT      NOT NULL,
         blog        INT       NOT NULL,
-        date        TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP(0)',
+        date        TimeStamp DEFAULT (datetime('now','localtime')),
         reply       smallint
         )""")
     get_db().commit()

@@ -126,7 +126,7 @@ def article(bg_id):
         curArti = Article(bg_id)
         curArti.getArti()
     except:
-        return render_template('error.html'),404
+         return render_template('error.html'),404
     return render_template('article.html',curArti=curArti,id = bg_id,info = info)
 
 
