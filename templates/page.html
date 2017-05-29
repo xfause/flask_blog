@@ -20,7 +20,6 @@
     <span>&#61484;</span>
     {% for tag in (result.tag or '').split(',') %}
     <a href="/arch/{{ tag }}/1"  class="nul"><span class="tag">{{ tag }}</span></a>
-    <script>console.log({{tag}})</script>
     {% endfor %}
     </div>
     <a href="/article/{{ result.id }}" class="nul"><div class="center"><button class="sm">阅读全文</button></div></a>

@@ -105,21 +105,32 @@ class comment:
             #按照id降序排列DESC 升序排列ASC order by
             cur.execute('SELECT content,date,author,id,reply from comm where blog=? order by id DESC',(self.id,))
             tmp = cur.fetchall()
-            #print(tmp)
-            #tmp = list(map(lambda x:list(x),tmp)) #lambda
 
             tmp = sorted(tmp,key=lambda x:(x[3] or x[4]))
-            self.cList = tmp
-            print(tmp)
             Listlen = len(tmp)
-            for i in range(Listlen-1):
+            for i in range(Listlen):
                 tmparr = list(tmp[i])
                 tmparr[4] = tmparr[4] or tmparr[3]
                 diff = tmparr[4]-tmparr[3]
                 diff = diff or ''
                 tmparr[4] = diff and u're'
+                if tmparr[4]=='':
+                    tmparr[4]=tmparr[3]
                 tmp[i] = tuple(tmparr)
 
+            
+            # Listlen = len(tmp)
+            # for i in range(Listlen):
+            #     tmparr = list(tmp[i])+['']
+            #     if tmparr[4]:
+            #         tmparr[5]='1'
+            #     else :
+            #         tmparr[4]=tmparr[3]
+            #     tmp[i] = tuple(tmparr)
+
+            # tmp = sorted(tmp,key=lambda x: x[4])
+            print(tmp)
+            self.cList = tmp
             # def coVeri(x):
             #     x[4] = x[4] or x[3]
             #     diff = x[4]-x[3]
@@ -131,13 +142,14 @@ class comment:
         except:
              self.cList = []
         finally:
+            #print(self.cList)
             return self.cList
 
     def getNew(self):
         blogdb = get_db()
         cur = blogdb.cursor()
         cur.execute('SELECT content,date,author,id,blog FROM comm order by id DESC LIMIT 12')
-        tmp = cur.fetchall() or []
+        tmp = cur.fetchall()
         self.cList = tmp;
         return self.cList
 

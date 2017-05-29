@@ -239,5 +239,5 @@ var diffDays = Math.floor((diff/days))
 var diffHours = Math.floor((diff-(diffDays)*days)/3600000)
 var diffMinutes = Math.floor((diff-(diffDays)*days-diffHours*3600000)/60000)
 var diffSeconds = Math.floor((diff-(diffDays)*days-diffHours*3600000-diffMinutes*60000)/1000)
-}
-siteTime()
+};
+siteTime();
